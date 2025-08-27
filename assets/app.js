@@ -1,3 +1,5 @@
+"use strict";
+
 /* ======= Datos del menú (Costa Rica) ======= */
 const MENU = {
   "Lunes": {
@@ -70,6 +72,7 @@ const grid = document.getElementById('grid');
 const dayPills = document.getElementById('dayPills');
 const mealPills = document.getElementById('mealPills');
 const list = document.getElementById('shoppingList');
+const themeBtn = document.getElementById('toggleTheme');
 
 function el(tag, attrs={}, children=[]){
   const n = document.createElement(tag);
@@ -89,10 +92,12 @@ function render(){
   const days = DAYS.filter(d => !selectedDay || d===selectedDay);
 
   days.forEach(day=>{
-    const meals = MENU[day];
-    if(!meals) return; // por si algún día no tiene contenido
+    const meals = MENU[day] || {};
     const items = (selectedMeal ? [[selectedMeal, meals[selectedMeal]]] :
-                   MEAL_ORDER.map(m=>[m, meals[m]])).filter(([k,v])=>Boolean(v));
+                   MEAL_ORDER.map(m=>[m, meals[m]])).filter(([_,v])=>Boolean(v));
+
+    // si no hay nada para ese día, no dibujar tarjeta
+    if(!items.length) return;
 
     const card = el('article',{class:'card'},[
       el('h3',{html:day}),
@@ -103,7 +108,11 @@ function render(){
 }
 
 /* ===== Pills (día y comida) ===== */
+function clear(container){ while(container.firstChild) container.removeChild(container.firstChild); }
+
 function buildPills(){
+  clear(dayPills); clear(mealPills);
+
   // Días (siempre muestra los 7)
   const allD = el('button',{class:'pill',textContent:'Todos','aria-pressed':'true'});
   allD.onclick=()=>{ selectedDay=null; updatePressed(dayPills, allD); render(); };
@@ -113,6 +122,7 @@ function buildPills(){
     b.onclick=()=>{ selectedDay=d; updatePressed(dayPills, b); render(); };
     dayPills.appendChild(b);
   });
+
   // Comidas
   const allM = el('button',{class:'pill',textContent:'Todas','aria-pressed':'true'});
   allM.onclick=()=>{ selectedMeal=null; updatePressed(mealPills, allM); render(); };
@@ -137,23 +147,33 @@ const SHOP = {
   "Grasas saludables":["Aguacate","Aceite de oliva","Nueces/Almendras/Macadamia","Chía","Linaza"]
 };
 (function renderShopping(){
+  if(!list) return;
   list.innerHTML='';
   Object.entries(SHOP).forEach(([c,items])=>{
     list.appendChild(el('li',{html:`<b>${c}:</b> ${items.join(', ')}`}));
   });
 })();
 
-/* ===== Tema ===== */
-document.getElementById('toggleTheme').onclick = () => {
-  const isDark = document.body.getAttribute('data-theme')==='dark';
-  document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-};
-if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
-  document.body.setAttribute('data-theme','dark');
+/* ===== Tema con persistencia ===== */
+function setTheme(theme){
+  document.body.setAttribute('data-theme', theme);
+  try{ localStorage.setItem('theme', theme); }catch{}
+  if(themeBtn){ themeBtn.innerHTML = (theme === 'dark' ? '🌙 Tema' : '☀️ Tema'); }
 }
+(function initTheme(){
+  const saved = (()=>{ try{return localStorage.getItem('theme');}catch{return null;} })();
+  if(saved){ setTheme(saved); }
+  else{
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(prefersDark ? 'dark' : 'light');
+  }
+})();
+themeBtn?.addEventListener('click', ()=>{
+  const next = document.body.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+  setTheme(next);
+});
 
 /* Init */
 buildPills();
 render();
-
 
