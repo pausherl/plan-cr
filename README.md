@@ -1,4 +1,4 @@
-# 🥑 Plan Alimenticio CR – GitHub Pages
+# 🥑 Plan Alimenticio CR 
 
 Sitio estático (HTML/CSS/JS) con un **plan semanal antiinflamatorio y low-carb**, adaptado a productos de **Costa Rica**.Incluye:
 
@@ -8,3 +8,4 @@ Sitio estático (HTML/CSS/JS) con un **plan semanal antiinflamatorio y low-carb*
 - 🛒 **Lista de compras** lista para copiar
 
 ---
+
