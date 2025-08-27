@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Plan CR – Anti-inflamatorio & Low-carb (Costa Rica)</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+<div class="container">
+  <header class="hero">
+    <h1>Plan Semanal – Hecho para Costa Rica</h1>
+    <p>Anti-inflamatorio y <b>bajo en azúcares/harinas</b>, con productos comunes en CR.</p>
+    <div class="badges">
+      <span class="badge">🇨🇷 Ingredientes locales</span>
+      <span class="badge">💪 Inmuno-reforzador</span>
+      <span class="badge">🥑 Low-carb limpio</span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div>
+      <strong>Filtrar por día:</strong>
+      <div class="pillbar" id="dayPills"></div>
+    </div>
+    <div>
+      <strong>Filtrar por comida:</strong>
+      <div class="pillbar" id="mealPills"></div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="toggleTheme">🌓 Tema</button>
+      <button class="btn primary" onclick="window.print()">🖨️ Imprimir</button>
+    </div>
+  </div>
+
+  <main id="grid" class="grid"></main>
+
+  <section>
+    <h3>Lista de Compras</h3>
+    <ul id="shoppingList"></ul>
+    <button class="btn" id="copyList">🛒 Copiar Lista</button>
+  </section>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
